@@ -1,29 +1,29 @@
 import { z } from 'zod';
 
-export const createExampleSchema = z.object({
+export const createWorkspaceSchema = z.object({
   body: z.object({
-    name: z.string().min(1, 'Name is required').max(100, 'Name cannot exceed 100 characters'),
+    title: z.string().min(1, 'Title is required').max(100, 'Title cannot exceed 100 characters'),
     description: z.string().max(500, 'Description cannot exceed 500 characters').optional(),
   }),
 });
 
-export const updateExampleSchema = z.object({
+export const updateWorkspaceSchema = z.object({
   params: z.object({
     id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
   }),
   body: z.object({
-    name: z.string().min(1).max(100).optional(),
+    title: z.string().min(1).max(100).optional(),
     description: z.string().max(500).optional(),
   }),
 });
 
-export const getExampleByIdSchema = z.object({
+export const getWorkspaceByIdSchema = z.object({
   params: z.object({
     id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
   }),
 });
 
-export const deleteExampleSchema = z.object({
+export const deleteWorkspaceSchema = z.object({
   params: z.object({
     id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
   }),

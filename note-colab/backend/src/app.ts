@@ -10,7 +10,7 @@ import { apiLimiter } from './middleware/rateLimiter';
 
 // Import routes
 import { healthRoutes } from './routes/health.routes';
-import { exampleRoutes } from './routes/example.routes';
+import { workspaceRoutes } from './routes/workspace';
 
 export const createApp = (): Express => {
   const app = express();
@@ -48,7 +48,7 @@ export const createApp = (): Express => {
 
   // API routes
   app.use('/api', healthRoutes);
-  app.use('/api/examples', exampleRoutes);
+  app.use('/api/workspaces', workspaceRoutes);
 
   // 404 handler
   app.use(notFound);

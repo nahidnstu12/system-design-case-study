@@ -1,0 +1,15 @@
+meta {
+  name: workspace single
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:5000/api/workspaces
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
