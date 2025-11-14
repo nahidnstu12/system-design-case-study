@@ -39,4 +39,4 @@ const WorkspaceSchema = new Schema<IWorkspace>(
 );
 
 export const Workspace: Model<IWorkspace> =
-  mongoose.models.Workspace || mongoose.model<IWorkspace>('Workspace', WorkspaceSchema);
+  mongoose.models.Workspace || mongoose.model<IWorkspace>('Workspaces', WorkspaceSchema);

@@ -3,8 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 import { asyncHandler } from '../utils/asyncHandler';
 import { CommonStatus, Page } from '@/models/pages';
 
-export const getPages = asyncHandler(async (_req: Request, res: Response) => {
-  const pages = await Page.find({ status: CommonStatus.ACTIVE }).populate('workspaceId').sort({ createdAt: -1 });
+export const getPages = asyncHandler(async (req: Request, res: Response) => {
+  const { id: workspaceId } = req.params;
+  const pages = await Page.find({ workspaceId, status: CommonStatus.ACTIVE })
+    .populate('workspaceId')
+    .sort({ createdAt: -1 });
   res.status(StatusCodes.OK).json({
     success: true,
     data: pages,
@@ -75,4 +78,3 @@ export const deletePage = asyncHandler(async (req: Request, res: Response) => {
     message: 'Page deleted successfully',
   });
 });
-
