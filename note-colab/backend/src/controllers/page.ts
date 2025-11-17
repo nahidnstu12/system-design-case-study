@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { asyncHandler } from '../utils/asyncHandler';
+import { retryMongoOperation } from '../utils/retryMongoOperation';
 import { CommonStatus, Page } from '@/models/pages';
 
 export const getPages = asyncHandler(async (req: Request, res: Response) => {
@@ -33,11 +34,44 @@ export const getPageById = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const createPage = asyncHandler(async (req: Request, res: Response) => {
-  const page = await Page.create({ ...req.body, workspaceId: req.params.id });
-  res.status(StatusCodes.CREATED).json({
-    success: true,
-    data: page,
-  });
+  try {
+    const page = await retryMongoOperation(
+      () => Page.create({ ...req.body, workspaceId: req.params.id }),
+      {
+        maxRetries: 3,
+        initialDelay: 1000,
+        maxDelay: 10000,
+      }
+    );
+
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      data: page,
+    });
+  } catch (error: any) {
+    // MongoDB connection errors after retries
+    if (
+      error?.name === 'MongoNetworkError' ||
+      error?.name === 'MongoServerError' ||
+      error?.name === 'MongoTimeoutError'
+    ) {
+      console.log("MongoDB connection errors after retries>>",error);
+      return res.status(StatusCodes.SERVICE_UNAVAILABLE).json({
+        success: false,
+        error: 'Service temporarily unavailable',
+        message: 'Database connection lost. Please retry.',
+        retryAfter: 5, // seconds
+      });
+    }
+
+    // Other errors (validation, etc.)
+    console.log("Other errors (validation, etc.)>>",error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message,
+    });
+  }
 });
 
 export const updatePage = asyncHandler(async (req: Request, res: Response) => {

@@ -30,7 +30,7 @@ const PageSchema = new Schema<IPage>(
     },
     workspaceId: {
       type: Schema.Types.ObjectId,
-      ref: 'Workspace',
+      ref: 'Workspaces',
       required: [true, 'Workspace ID is required'],
     },
     status: {

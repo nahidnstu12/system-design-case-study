@@ -52,6 +52,7 @@ export default function WorkspaceDetailPage() {
         setSelectedPageId(data[0]._id);
       }
     } catch (err: any) {
+      console.log("fetchPages error>>",err);
       addToast({
         title: 'Failed to load pages',
         description: err.message || 'An error occurred.',

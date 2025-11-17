@@ -1,4 +1,6 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document, Model, Query } from 'mongoose';
+import { Page } from './pages';
+import { NextFunction } from 'express';
 
 export enum CommonStatus {
   ACTIVE = 'active',
@@ -35,6 +37,22 @@ const WorkspaceSchema = new Schema<IWorkspace>(
   },
   {
     timestamps: true,
+  }
+);
+
+WorkspaceSchema.pre(
+  'findOneAndDelete' as any,
+  async function (this: Query<IWorkspace | null, IWorkspace>, next: NextFunction) {
+    try {
+      const workspaceId = this.getFilter()._id;
+      if (!workspaceId) {
+        throw new Error('Workspace ID is required');
+      }
+      await Page.deleteMany({ workspaceId });
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
