@@ -275,3 +275,5 @@ npm run clean            # Remove dist folder
 - Check Zod schema matches request body structure
 - Verify middleware order in `app.ts`
 
+**Seed Command**
+npx tsx src/seeder/workspace.ts

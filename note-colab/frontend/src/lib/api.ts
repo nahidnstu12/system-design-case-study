@@ -66,12 +66,15 @@ class ApiClient {
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
+    // Ensure Content-Type is always set for JSON requests
+    const headers = new Headers(options.headers || {});
+    if (!headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
+
     const config: RequestInit = {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
       ...options,
+      headers,
     };
 
     try {
@@ -140,10 +143,11 @@ class ApiClient {
     return this.request<T>(endpoint, { method: "GET" });
   }
 
-  async post<T>(endpoint: string, body?: unknown): Promise<T> {
+  async post<T>(endpoint: string, body?: unknown, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, {
       method: "POST",
-      body: JSON.stringify(body),
+      ...(body !== undefined && { body: JSON.stringify(body) }),
+      ...options,
     });
   }
 

@@ -10,8 +10,8 @@ export const workspaceApi = {
     return apiClient.get<Workspace>(`/workspaces/${id}`);
   },
 
-  create: async (data: CreateWorkspaceInput): Promise<Workspace> => {
-    return apiClient.post<Workspace>('/workspaces', data);
+  create: async (data: CreateWorkspaceInput, options?: RequestInit): Promise<Workspace> => {
+    return apiClient.post<Workspace>('/workspaces', data, options);
   },
 
   update: async (id: string, data: UpdateWorkspaceInput): Promise<Workspace> => {

@@ -11,6 +11,7 @@ import { apiLimiter } from './middleware/rateLimiter';
 // Import routes
 import { healthRoutes } from './routes/health.routes';
 import { workspaceRoutes } from './routes/workspace';
+import { idempotencyMiddleware } from './middleware/idempotency';
 
 export const createApp = (): Express => {
   const app = express();
@@ -30,6 +31,9 @@ export const createApp = (): Express => {
 
   // Compression
   app.use(compression());
+
+  // Idempotency middleware
+  app.use(idempotencyMiddleware);
 
   // Logging
   if (env.NODE_ENV === 'development') {

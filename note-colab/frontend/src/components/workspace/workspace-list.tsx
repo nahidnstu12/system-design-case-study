@@ -14,6 +14,7 @@ import type {
   CreateWorkspaceInput,
   UpdateWorkspaceInput,
 } from "@/types/workspace";
+import { v4 } from "uuid";
 
 export function WorkspaceList() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -44,8 +45,9 @@ export function WorkspaceList() {
   }, []);
 
   const handleCreate = async (data: CreateWorkspaceInput) => {
+    const requestId = v4();
     try {
-      await workspaceApi.create(data);
+      await workspaceApi.create(data, { headers: { 'X-Request-ID': requestId } });
       addToast({
         title: "Workspace created",
         description: "Your workspace has been created successfully.",

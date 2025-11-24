@@ -18,6 +18,7 @@ export const validate =
           const path = err.path.join('.');
           errors[path] = err.message;
         });
+        console.log("Validation Error>>",errors);
 
         res.status(StatusCodes.BAD_REQUEST).json({
           success: false,
