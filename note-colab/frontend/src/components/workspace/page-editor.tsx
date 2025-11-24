@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/toast';
 import type { Page, CreatePageInput, UpdatePageInput } from '@/types/page';
+import { sanitize } from '@/lib/utils';
 
 interface PageEditorProps {
   page: Page | null;
@@ -60,8 +61,8 @@ export function PageEditor({ page, workspaceId, onSave, onPageChange }: PageEdit
     setIsSaving(true);
     try {
       await onSave({
-        title: title.trim(),
-        content: content.trim() || undefined,
+        title: sanitize(title.trim()),
+        content: sanitize(content.trim()),
       });
       addToast({
         title: page ? 'Page updated' : 'Page created',

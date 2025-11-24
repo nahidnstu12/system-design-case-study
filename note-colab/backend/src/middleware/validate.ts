@@ -5,11 +5,17 @@ import { StatusCodes } from 'http-status-codes';
 export const validate =
   (schema: ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse({
+      const result = schema.parse({
         body: req.body,
         query: req.query,
         params: req.params,
-      });
+      }) as { body?: any; query?: any; params?: any };
+      
+      // Update req with sanitized values from Zod transform
+      if (result.body) req.body = result.body;
+      if (result.query) req.query = result.query;
+      if (result.params) req.params = result.params;
+      
       next();
     } catch (error) {
       if (error instanceof ZodError) {

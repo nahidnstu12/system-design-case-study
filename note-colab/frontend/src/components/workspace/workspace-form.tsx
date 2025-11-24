@@ -1,10 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -13,7 +9,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import type { Workspace, CreateWorkspaceInput, UpdateWorkspaceInput } from '@/types/workspace';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { sanitize } from '@/lib/utils';
+import type { CreateWorkspaceInput, UpdateWorkspaceInput, Workspace } from '@/types/workspace';
+import { useEffect, useState } from 'react';
 
 interface WorkspaceFormProps {
   open: boolean;
@@ -51,8 +52,8 @@ export function WorkspaceForm({ open, onOpenChange, workspace, onSubmit }: Works
       }
 
       await onSubmit({
-        title: title.trim(),
-        description: description.trim() || undefined,
+        title: sanitize(title.trim()),
+        description: sanitize(description.trim()),
       });
 
       onOpenChange(false);

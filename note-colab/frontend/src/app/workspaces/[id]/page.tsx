@@ -11,6 +11,7 @@ import { workspaceApi } from '@/lib/workspace-api';
 import { useToast } from '@/components/ui/toast';
 import type { Page, CreatePageInput, UpdatePageInput } from '@/types/page';
 import type { Workspace } from '@/types/workspace';
+import { v4 } from 'uuid';
 
 export default function WorkspaceDetailPage() {
   const params = useParams();
@@ -66,10 +67,11 @@ export default function WorkspaceDetailPage() {
 
   const handleCreatePage = async () => {
     try {
+      const requestId = v4();
       const newPage = await pageApi.create(workspaceId, {
         title: 'Untitled Page',
         content: '',
-      });
+      }, { headers: { 'X-Request-ID': requestId } });
       setPages([newPage, ...pages]);
       setSelectedPageId(newPage._id);
       addToast({

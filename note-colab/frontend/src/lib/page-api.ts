@@ -10,8 +10,8 @@ export const pageApi = {
     return apiClient.get<Page>(`/workspaces/${workspaceId}/pages/${pageId}`);
   },
 
-  create: async (workspaceId: string, data: CreatePageInput): Promise<Page> => {
-    return apiClient.post<Page>(`/workspaces/${workspaceId}/pages`, data);
+  create: async (workspaceId: string, data: CreatePageInput, options?: RequestInit): Promise<Page> => {
+    return apiClient.post<Page>(`/workspaces/${workspaceId}/pages`, data, options);
   },
 
   update: async (workspaceId: string, pageId: string, data: UpdatePageInput): Promise<Page> => {
