@@ -75,24 +75,45 @@ export const createPage = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const updatePage = asyncHandler(async (req: Request, res: Response) => {
-  const { pageId } = req.params;
-  const page = await Page.findByIdAndUpdate(pageId, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  if (!page) {
-    res.status(StatusCodes.NOT_FOUND).json({
-      success: false,
-      message: 'Page not found',
+  try{
+    const { pageId } = req.params;
+    const pageExist = await Page.findById(pageId);
+    console.log("pageExist>>",pageExist, req.body);
+    if (!pageExist) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: 'Page not found',
+      });
+      return;
+    }
+    if (pageExist.__v !== req.body.__v) {
+      return res.status(StatusCodes.CONFLICT).json({
+        success: false,
+        message: 'Page version mismatch',
+        serverVersion: pageExist.__v,
+        clientVersion: req.body.__v,
+        serverContent: pageExist.content,
+        clientContent: req.body.content,
+      });
+    }
+    const page = await Page.findOneAndUpdate({ _id: pageId, __v: req.body.__v }, { $set: { title: req.body.title, content: req.body.content } , $inc: { __v: 1 } }, {
+      new: true,
+      runValidators: true,
     });
-    return;
+  
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      data: page,
+    });
+  
+  }catch(error: any){
+    console.log("Error in updatePage>>",error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message,
+    });
   }
-
-  res.status(StatusCodes.OK).json({
-    success: true,
-    data: page,
-  });
 });
 
 export const deletePage = asyncHandler(async (req: Request, res: Response) => {

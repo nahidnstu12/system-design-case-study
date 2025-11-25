@@ -13,8 +13,8 @@ export const validate =
       
       // Update req with sanitized values from Zod transform
       if (result.body) req.body = result.body;
-      if (result.query) req.query = result.query;
-      if (result.params) req.params = result.params;
+      if (result.query) req.query = { ...req.query, ...result.query };
+      if (result.params) req.params = { ...req.params, ...result.params };
       
       next();
     } catch (error) {

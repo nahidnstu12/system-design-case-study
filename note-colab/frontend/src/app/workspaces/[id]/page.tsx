@@ -96,7 +96,9 @@ export default function WorkspaceDetailPage() {
       setSelectedPageId(newPage._id);
     } else {
       // Update existing page
-      await pageApi.update(workspaceId, selectedPageId, data as UpdatePageInput);
+      const updatedPage = await pageApi.update(workspaceId, selectedPageId, data as UpdatePageInput);
+      console.log("updatedPage>>",updatedPage);
+      setPages(pages.map((p) => p._id === selectedPageId ? updatedPage : p));
       await fetchPages();
     }
   };

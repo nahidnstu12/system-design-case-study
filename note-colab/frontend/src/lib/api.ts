@@ -12,6 +12,10 @@ export interface ApiError {
   message: string;
   errors?: Record<string, string[]>;
   retryAfter?: number;
+  serverVersion?: number;
+  clientVersion?: number;
+  serverContent?: string;
+  clientContent?: string;
 }
 
 interface RetryOptions {
@@ -85,8 +89,7 @@ class ApiClient {
         const error: ApiError = {
           success: false,
           message: data.message || `HTTP error! status: ${response.status}`,
-          errors: (data as any).errors,
-          retryAfter: (data as any).retryAfter,
+          ...(data as any),
         };
 
         // Retry on retryable errors

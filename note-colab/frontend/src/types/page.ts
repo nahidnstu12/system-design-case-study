@@ -12,15 +12,18 @@ export interface Page {
   status: PageStatus;
   createdAt: string;
   updatedAt: string;
+  __v?: number;
 }
 
 export interface CreatePageInput {
   title: string;
   content?: string;
+  __v?: number;
 }
 
 export interface UpdatePageInput {
   title?: string;
   content?: string;
+  __v?: number;
 }
 

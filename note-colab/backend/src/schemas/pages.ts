@@ -13,12 +13,14 @@ export const createPageSchema = z.object({
       .max(500, 'Content cannot exceed 500 characters')
       .optional()
       .transform((val) => (val ? sanitizeContent(val) : val)),
+    __v: z.number().optional(),
   }),
 });
 
 export const updatePageSchema = z.object({
   params: z.object({
-    id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
+    id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid workspace ID format'),
+    pageId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid page ID format'),
   }),
   body: z.object({
     title: z
@@ -32,17 +34,20 @@ export const updatePageSchema = z.object({
       .max(5000)
       .optional()
       .transform((val) => (val ? sanitizeContent(val) : val)),
+    __v: z.number().optional(),
   }),
 });
 
 export const getPageByIdSchema = z.object({
   params: z.object({
-    id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
+    id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid workspace ID format'),
+    pageId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid page ID format'),
   }),
 });
 
 export const deletePageSchema = z.object({
   params: z.object({
-    id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
+    id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid workspace ID format'),
+    pageId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid page ID format'),
   }),
 });
