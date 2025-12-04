@@ -4,8 +4,8 @@ meta {
   seq: 6
 }
 
-post {
-  url: http://localhost:5000/api/workspaces
+put {
+  url: http://localhost:5000/api/workspaces/6924408fabf13cfdf0766d24/pages/692447e19ee9b6420659449f
   body: json
   auth: inherit
 }
@@ -16,8 +16,8 @@ headers {
 
 body:json {
   {
-    "title": "test Workspace 4",
-    "description": "<a href=\"javascript:alert(1)\">Click me</a>"
+    "content": "<a href=\"javascript:alert(1)\">Click me</a>",
+    "__v": 4
   }
 }
 
